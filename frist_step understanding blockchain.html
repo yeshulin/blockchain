@@ -26,3 +26,51 @@ type Block struct {
 
     b.Hash = hash[:]
    }
+   接下来，我们来创建一个区块
+   func NewBlock(data string, prevBlockHash []byte) *Block {
+     block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}}
+     block.SetHash()
+     return block
+  }
+   到这里我们的区块就已经完成了。
+#三、区块链
+　　接下来，我们来看一下，如果创建一个区块链。区块链从本质上来说，就是所有的区块通过前一个hash与后一个hash进行有序排列。
+    我们来创建一个区块链的数据结构。
+    type blockchain struct{
+       blocks *[]Block 
+   }
+   接下来，我们来写一个为区块链添加区块的函数：
+    func (bc *blockchain) Addblock(data string){
+	//data,表示的是数据内容，我们更多的应该去以json的方式进行存储
+	prevblock := bc.blocks[len(bc.blocks)-1]//查找当前区块链上的最后一个块，为什么要减1呢？因为golang是以0作为起始下标，另外有一种golang下标是以1作为起始，一下忘记了，后面补上
+       newblock := NewBlock(data,prevblock)//创建一个新的区块链
+       bc.blocks = append(bc.blocks,newblock)//将当前的链上连接上新的区块
+    }
+    基本的内容我们已经完成了，那么接上来我们要创造世界上的第一个区块，既币圈所谓的创始区块：
+    func Newfristblock(data string) *Block {
+        return NewBlock(data,[]byte{})//第一个区块链的上一个hash为空 
+    }
+现在，我们可以实现一个函数来创建有创世块的区块链：
+
+func NewBlockchain() *Blockchain {
+    return &Blockchain{[]*Block{Newfristblock("This is frist blockchain")}}
+}
+来检查一个我们的区块链是否如期工作：
+
+func main() {
+    bc := NewBlockchain()
+
+    bc.AddBlock("我将我的1000万个比特币转给了中本聪")
+    bc.AddBlock("本中聪将1000万个比特币，转给了王思聪，于是它就是世界上最富有的人")
+
+    for _, block := range bc.blocks {
+        fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)
+        fmt.Printf("Data: %s\n", block.Data)
+        fmt.Printf("Hash: %x\n", block.Hash)
+        fmt.Println()
+    }
+}
+
+至于输出结果，有兴趣的朋友按照我的方式，进行去创建一个main.go文件进行运行，就可以看到一条简单的区块链形成。
+
+区块链的概念比较容易理解，但是数字货币的关键还有共识算法、智能合约等技术，我将会跟大家一起学习相关技术，希望可以共同进步。
