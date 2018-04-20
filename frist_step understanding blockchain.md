@@ -35,7 +35,7 @@ type Block struct {<br>
     headers := bytes.Join([][]byte{b.PrevBlockHash, b.Data, timestamp}, []byte{})<br>
     hash := sha256.Sum256(headers)<br>
 
-    b.Hash = hash[:]<br>
+    b.Hash = hash[:]
    }<br>
    接下来，我们来创建一个区块<br>
    func NewBlock(data string, prevBlockHash []byte) *Block {<br>
@@ -75,13 +75,13 @@ func main() {<br>
     bc.AddBlock("我将我的1000万个比特币转给了中本聪")<br>
     bc.AddBlock("本中聪将1000万个比特币，转给了王思聪，于是它就是世界上最富有的人")<br>
 
-    for _, block := range bc.blocks {<br>
-        fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)<br>
-        fmt.Printf("Data: %s\n", block.Data)<br>
-        fmt.Printf("Hash: %x\n", block.Hash)<br>
-        fmt.Println()<br>
-    }<br>
-}<br>
+    for _, block := range bc.blocks {
+        fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)
+        fmt.Printf("Data: %s\n", block.Data)
+        fmt.Printf("Hash: %x\n", block.Hash)
+        fmt.Println()
+    }
+}
 <br>
 至于输出结果，有兴趣的朋友按照我的方式，进行去创建一个main.go文件进行运行，就可以看到一条简单的区块链形成。<br>
 
